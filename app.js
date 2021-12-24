@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const mongoose = require("mongoose");
+const cors = require('cors');
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -17,14 +17,14 @@ try {
     useUnifiedTopology: true
   });
 } catch(error) {
-  console.log(error);
+  res.status(500).send('Internal server error');
 }
 
 app.use(bodyParser());
 app.use(cookieParser());
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use("/", apiRoutes);
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header(
     'Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization,  X-PINGOTHER'

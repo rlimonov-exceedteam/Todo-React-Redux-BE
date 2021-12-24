@@ -1,9 +1,5 @@
 const User = require('../../db/models/user-schema/index');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
 const userService = require('../../service/user-service');
-const { secret } = require('../../../config');
 
 module.exports.createNewUser = async (req, res) => {
   try {
@@ -16,8 +12,7 @@ module.exports.createNewUser = async (req, res) => {
 
     return res.json(userData);
   } catch(e) {
-    console.log(e);
-    res.status(400).send('Incorrect data');
+    res.status(400).send({message: e.message});
   }
 }
 
@@ -34,7 +29,6 @@ module.exports.authorise = async (req, res) => {
 
     return res.json(userData);
   } catch(e) {
-    console.log(e);
     res.status(400).send('Data is incorrect, error');
   }
 }
@@ -46,7 +40,7 @@ module.exports.logout = async (req, res, next) => {
     res.clearCookie('refreshToken', {path:'/'});
     return res.json(token);
   } catch(e) {
-    console.log(e);
+    res.status(400).send({message: 'Token is not sended'});
   }
 }
 
@@ -59,7 +53,6 @@ module.exports.refreshToken = async (req, res, nest) => {
       httpOnly: true
     }).send(userData);
   } catch(e) {
-    res.status(403).send('The token is not sended or is incorrect');
-    console.log(e);
+    res.status(422).send('The token is not sended or is incorrect');
   }
 }

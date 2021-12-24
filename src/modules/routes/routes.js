@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
+const { verifyAccessToken } = require('../middlewares/verifyAccessToken');
 
 const {
   createNewUser,
@@ -25,10 +26,10 @@ router.post('/authorise', authorise);
 router.get('/refreshToken', refreshToken);
 router.get('/logout', logout);
 
-router.get('/getAllTasks', getAllTasks);
-router.post('/createNewTask', addTask);
-router.patch('/updateTask', updateTask);
-router.patch('/changeTaskStage', changeTaskStage);
-router.delete('/deleteTask', deleteTask);
+router.get('/getAllTasks', verifyAccessToken, getAllTasks);
+router.post('/createNewTask', verifyAccessToken, addTask);
+router.patch('/updateTask', verifyAccessToken, updateTask);
+router.patch('/changeTaskStage', verifyAccessToken, changeTaskStage);
+router.delete('/deleteTask', verifyAccessToken, deleteTask);
 
 module.exports = router;
