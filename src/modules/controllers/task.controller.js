@@ -15,13 +15,14 @@ module.exports.getAllTasks = async (req, res) => {
 module.exports.addTask = async (req, res) => {
   try {
     const {
+      taskName,
       taskText,
       stage
     } = req.body;
 
     const userId = await req.payload.id;
 
-    if (taskText && stage) {
+    if (taskText && stage && taskName) {
       const task = new Task({...req.body, userId});
       await task.save()
       .then(result => {

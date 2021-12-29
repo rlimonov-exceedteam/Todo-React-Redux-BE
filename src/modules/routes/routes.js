@@ -18,6 +18,13 @@ const {
   deleteTask
 } = require('../controllers/task.controller');
 
+const {
+  addComment,
+  getTaskComments,
+  changeCommentText,
+  deleteComment,
+} = require('../controllers/comment.controller');
+
 router.post('/createNewUser', [
   check('login', "Login cannot be empty").notEmpty(),
   check('password', "Password cannot be empty").notEmpty()
@@ -31,5 +38,10 @@ router.post('/createNewTask', verifyAccessToken, addTask);
 router.patch('/updateTask', verifyAccessToken, updateTask);
 router.patch('/changeTaskStage', verifyAccessToken, changeTaskStage);
 router.delete('/deleteTask', verifyAccessToken, deleteTask);
+
+router.post('/addComment', verifyAccessToken, addComment);
+router.get('/getTaskComments', getTaskComments);
+router.patch('/changeCommentText', changeCommentText);
+router.delete('/deleteComment', deleteComment);
 
 module.exports = router;
