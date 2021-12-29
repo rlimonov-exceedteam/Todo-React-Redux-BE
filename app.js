@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const cors = require('cors');
+const errorMiddleware = require('./src/modules/middlewares/error-middleware');
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -32,7 +33,7 @@ app.use((req, res) => {
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS');
 });
-
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log('App listening');

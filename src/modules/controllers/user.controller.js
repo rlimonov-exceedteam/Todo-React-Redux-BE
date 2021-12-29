@@ -19,7 +19,6 @@ module.exports.createNewUser = async (req, res) => {
 module.exports.authorise = async (req, res) => {
   try {
     const { login, password } = req.body;
-    const user = await User.findOne({login});
     const userData = await userService.login(login, password);
 
     res.cookie('refreshToken', userData.refreshToken, {
@@ -27,13 +26,13 @@ module.exports.authorise = async (req, res) => {
       httpOnly: true
     });
 
-    return res.json(userData);
+    res.send(userData);
   } catch(e) {
-    res.status(400).send('Data is incorrect, error');
+    res.status(400).send(e.message);
   }
 }
 
-module.exports.logout = async (req, res, next) => {
+module.exports.logout = async (req, res) => {
   try {
     const { refreshToken } = req.cookies;
     const token = await userService.logout(refreshToken);

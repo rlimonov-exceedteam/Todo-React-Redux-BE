@@ -1,6 +1,7 @@
 const UserModel = require('.././db/models/user-schema');
 const bcrypt = require('bcrypt');
 const tokenService = require('./token-service');
+const ApiError = require('../exceptions/api-error');
 const UserDto = require('../dtos/user-dto');
 
 class UserService {
@@ -8,7 +9,7 @@ class UserService {
         const candidate = await UserModel.findOne({ login });
 
         if (candidate) {
-            throw new Error(`User with login ${login} already exists.`);
+            throw ApiError.BadRequest(`User with login ${login} already exists.`);
         }
 
         const hashPassword = await bcrypt.hash(password, 3);
@@ -25,13 +26,13 @@ class UserService {
         const user = await UserModel.findOne({login});
 
         if (!user) {
-            throw new Error('User is not found');
+            throw ApiError.BadRequest('User is not found');
         }
 
         const arePassEquals = await bcrypt.compare(password, user.password);
     
         if (!arePassEquals) {
-            throw new Error('Password dismatch');
+            throw ApiError.BadRequest('Password dismatch');
         }
 
         const userDto = new UserDto(user);
@@ -48,14 +49,14 @@ class UserService {
 
     async refresh(refreshtoken) {
         if (!refreshtoken) {
-            throw new Error('No token is sended');
+            throw ApiError.UnauthorizedError('No token is sended');
         }
 
         const userData = tokenService.validateRefreshToken(refreshtoken);
         const tokenFromDb = await tokenService.findToken(refreshtoken);
 
         if (!userData || !tokenFromDb) {
-            throw new Error('Unauthorized');
+            throw ApiError.UnauthorizedError('Unauthorized');
         }
         
 
