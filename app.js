@@ -23,10 +23,10 @@ try {
 
 app.use(bodyParser());
 app.use(cookieParser());
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({credentials: true, origin: 'https://elastic-gates-704970.netlify.app'}));
 app.use("/", apiRoutes);
 app.use((req, res) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', 'https://elastic-gates-704970.netlify.app');
   res.header(
     'Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization,  X-PINGOTHER'
   );
